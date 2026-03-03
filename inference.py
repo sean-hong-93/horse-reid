@@ -1,49 +1,107 @@
 """
-Horse Re-ID Inference
-=====================
-Given a query image and a gallery folder, detects horses with YOLO,
-embeds them with the Re-ID model, and returns top-K matches.
+Horse Re-ID Video Inference
+============================
+Detects horses with YOLO frame-by-frame, assigns persistent Re-ID labels,
+and writes an annotated output video.
+
+New horses that appear mid-video are automatically added to the gallery.
 
 Usage:
-    # Query vs gallery folder
-    python inference.py --query path/to/query.jpg --gallery path/to/gallery/
-
-    # Query vs multiple specific images
-    python inference.py --query query.jpg --gallery img1.jpg img2.jpg img3.jpg
-
-    # Adjust top-K results (default 5)
-    python inference.py --query query.jpg --gallery gallery/ --topk 3
-
-    # Skip saving output image
-    python inference.py --query query.jpg --gallery gallery/ --no-save
+    python inference.py --source video.mp4
+    python inference.py --source video.mp4 --threshold 0.65 --output out.mp4
+    python inference.py --source video.mp4 --threshold 0.65 --skip 2  # process every 2nd frame
 """
 
 import argparse
 import sys
 from pathlib import Path
 
+import cv2
+import numpy as np
 import torch
 import torch.nn.functional as F
 from torchvision import transforms
 from PIL import Image
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 
 sys.path.insert(0, str(Path(__file__).parent))
 from horse_reid_triplet import HorseReIDModel, Config
 
 # ── Constants ─────────────────────────────────────────────────
-HORSE_CLS  = 17   # COCO class index for horse
-CROP_PAD   = 0.12  # fractional padding around YOLO bounding box
-IMG_EXTS   = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
+HORSE_CLS  = 17      # COCO class id for horse
+CROP_PAD   = 0.10    # padding fraction around YOLO box
 CKPT_PATH  = "/Users/3i-a1-2022-062/Sean/workspace/RE-ID/checkpoints/best_horse_reid.pth"
 YOLO_MODEL = "yolo11n.pt"
 
+# Distinct colors per horse ID (BGR for OpenCV)
+ID_COLORS = [
+    (255, 100,  50),   # blue-ish
+    ( 50, 200,  50),   # green
+    ( 50,  50, 255),   # red
+    (255, 200,   0),   # cyan
+    (200,   0, 255),   # magenta
+    (  0, 200, 255),   # yellow
+    (150, 100, 255),   # pink
+    (  0, 180, 180),   # olive
+]
 
-# ── Model loading ─────────────────────────────────────────────
+def get_color(horse_id: int):
+    return ID_COLORS[horse_id % len(ID_COLORS)]
 
-def load_reid_model(ckpt_path: str, device: torch.device) -> tuple:
+
+# ── Re-ID Gallery / Tracker ───────────────────────────────────
+
+class HorseTracker:
+    """
+    Maintains a gallery of known horse embeddings.
+    Each new detection is compared to the gallery:
+      - sim >= threshold  →  matched to existing ID (gallery updated via EMA)
+      - sim <  threshold  →  new horse, new ID added to gallery
+    """
+
+    def __init__(self, sim_threshold: float = 0.65, ema_alpha: float = 0.2):
+        self.gallery: dict[int, torch.Tensor] = {}   # id → L2-normalized embedding
+        self.next_id = 0
+        self.sim_threshold = sim_threshold
+        self.ema_alpha = ema_alpha                   # gallery update rate
+
+    def assign(self, emb: torch.Tensor) -> tuple[int, float]:
+        """Return (horse_id, best_similarity). Adds new ID if no match found."""
+        if not self.gallery:
+            return self._new_id(emb), 0.0
+
+        # Compute cosine similarity to every known horse
+        gallery_ids  = list(self.gallery.keys())
+        gallery_embs = torch.stack([self.gallery[i] for i in gallery_ids])  # [N, D]
+        sims = F.cosine_similarity(emb.unsqueeze(0), gallery_embs).cpu()    # [N]
+
+        best_idx = int(sims.argmax())
+        best_sim = float(sims[best_idx])
+        best_id  = gallery_ids[best_idx]
+
+        if best_sim >= self.sim_threshold:
+            # EMA update: keeps gallery fresh without overwriting
+            updated = (1 - self.ema_alpha) * self.gallery[best_id] + self.ema_alpha * emb
+            self.gallery[best_id] = F.normalize(updated, dim=0)
+            return best_id, best_sim
+        else:
+            return self._new_id(emb), best_sim
+
+    def _new_id(self, emb: torch.Tensor) -> int:
+        horse_id = self.next_id
+        self.gallery[horse_id] = emb
+        self.next_id += 1
+        print(f"  [tracker] New horse detected → ID #{horse_id}  "
+              f"(gallery size: {len(self.gallery)})")
+        return horse_id
+
+    @property
+    def num_ids(self):
+        return len(self.gallery)
+
+
+# ── Model utilities ───────────────────────────────────────────
+
+def load_reid(ckpt_path: str, device: torch.device):
     ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
     cfg  = Config()
     model = HorseReIDModel(
@@ -57,166 +115,160 @@ def load_reid_model(ckpt_path: str, device: torch.device) -> tuple:
     ).to(device)
     model.load_state_dict(ckpt["model_state_dict"])
     model.eval()
-    print(f"Re-ID model loaded  (epoch {ckpt['epoch']+1}, val_loss={ckpt['val_loss']:.4f})")
+    print(f"Re-ID loaded  (epoch {ckpt['epoch']+1}, val_loss={ckpt['val_loss']:.4f})")
     return model, cfg
 
 
-def load_yolo(yolo_model: str):
-    from ultralytics import YOLO
-    return YOLO(yolo_model)
-
-
-# ── Image utilities ───────────────────────────────────────────
-
-def detect_horse_crop(yolo, image_path: Path, pad: float = CROP_PAD) -> Image.Image:
-    """Run YOLO and return the highest-confidence horse crop (with padding).
-    Falls back to the full image if no horse is detected."""
-    full = Image.open(image_path).convert("RGB")
-    results = yolo(str(image_path), classes=[HORSE_CLS], conf=0.15, verbose=False)
-    boxes = results[0].boxes
-    if boxes is None or len(boxes) == 0:
-        return full  # fallback
-
-    best  = int(boxes.conf.cpu().argmax())
-    x1, y1, x2, y2 = boxes.xyxy[best].cpu().int().tolist()
-    w, h = x2 - x1, y2 - y1
-    W, H = full.size
-    x1 = max(0, x1 - int(w * pad))
-    y1 = max(0, y1 - int(h * pad))
-    x2 = min(W, x2 + int(w * pad))
-    y2 = min(H, y2 + int(h * pad))
-    return full.crop((x1, y1, x2, y2))
-
-
-def embed_image(model, crop: Image.Image, cfg: Config, device: torch.device) -> torch.Tensor:
-    tf = transforms.Compose([
+def embed(model, crop_bgr: np.ndarray, cfg: Config, device: torch.device) -> torch.Tensor:
+    """Embed a BGR numpy crop into an L2-normalized 128-dim vector."""
+    pil = Image.fromarray(cv2.cvtColor(crop_bgr, cv2.COLOR_BGR2RGB))
+    tf  = transforms.Compose([
         transforms.Resize(cfg.IMG_SIZE),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
     ])
-    t = tf(crop.convert("RGB")).unsqueeze(0).to(device)
+    t = tf(pil).unsqueeze(0).to(device)
     with torch.no_grad():
         return model(t).squeeze(0)
 
 
-def collect_images(sources: list[str]) -> list[Path]:
-    """Expand a mix of files and directories into a flat image path list."""
-    paths = []
-    for src in sources:
-        p = Path(src)
-        if p.is_dir():
-            paths.extend(sorted(f for f in p.iterdir()
-                                 if f.suffix.lower() in IMG_EXTS and '._' not in f.name))
-        elif p.is_file() and p.suffix.lower() in IMG_EXTS:
-            paths.append(p)
-        else:
-            print(f"  [warn] skipping {src} — not an image or directory")
-    return paths
+# ── Drawing ───────────────────────────────────────────────────
+
+def draw_box(frame: np.ndarray, x1, y1, x2, y2,
+             horse_id: int, sim: float, conf: float):
+    color = get_color(horse_id)
+    cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+
+    label = f"Horse #{horse_id}"
+    if sim > 0:
+        label += f"  sim={sim:.2f}"
+    sub   = f"det={conf:.2f}"
+
+    # Background for label
+    (lw, lh), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 2)
+    cv2.rectangle(frame, (x1, y1 - lh - 10), (x1 + lw + 4, y1), color, -1)
+    cv2.putText(frame, label, (x1 + 2, y1 - 4),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    cv2.putText(frame, sub, (x1 + 2, y1 + 18),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 1)
 
 
-# ── Visualisation ─────────────────────────────────────────────
+def draw_gallery_overlay(frame: np.ndarray, tracker: HorseTracker):
+    """Small overlay in top-left showing current gallery IDs."""
+    lines = [f"Gallery: {tracker.num_ids} horse(s)"]
+    for hid in tracker.gallery:
+        lines.append(f"  Horse #{hid}")
+    for i, line in enumerate(lines):
+        cv2.putText(frame, line, (10, 24 + i * 20),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.55,
+                    (255, 255, 255), 2)
+        cv2.putText(frame, line, (10, 24 + i * 20),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.55,
+                    get_color(hid) if i > 0 else (200, 200, 200), 1)
 
-def save_results(query_crop: Image.Image, query_path: Path,
-                 results: list[dict], out_path: Path):
-    topk = len(results)
-    fig, axes = plt.subplots(1, topk + 1, figsize=(4 * (topk + 1), 5))
-    fig.patch.set_facecolor("#F5F5F5")
-    fig.suptitle("Horse Re-ID — Top-K Results", fontsize=13, fontweight="bold")
 
-    BLUE = "#1976D2"
-    GREEN = "#388E3C"
-    RED   = "#D32F2F"
+# ── Crop helper ───────────────────────────────────────────────
 
-    # Query
-    axes[0].imshow(query_crop)
-    axes[0].set_title("Query", fontsize=11, fontweight="bold", color=BLUE)
-    axes[0].set_xlabel(query_path.name, fontsize=8, color="#555")
-    axes[0].set_xticks([]); axes[0].set_yticks([])
-    for sp in axes[0].spines.values():
-        sp.set_edgecolor(BLUE); sp.set_linewidth(4)
-
-    # Top-K matches
-    for i, r in enumerate(results):
-        ax = axes[i + 1]
-        ax.imshow(r["crop"])
-        sim   = r["sim"]
-        color = GREEN if i == 0 else (RED if sim < 0.5 else "#FB8C00")
-        ax.set_title(f"#{i+1}  sim={sim:+.4f}", fontsize=10,
-                     fontweight="bold", color=color)
-        ax.set_xlabel(r["path"].name, fontsize=7, color="#555")
-        ax.set_xticks([]); ax.set_yticks([])
-        for sp in ax.spines.values():
-            sp.set_edgecolor(color); sp.set_linewidth(3)
-
-    plt.tight_layout(pad=1.5)
-    plt.savefig(out_path, dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
-    print(f"Saved: {out_path}")
+def get_crop(frame: np.ndarray, x1, y1, x2, y2, pad=CROP_PAD) -> np.ndarray:
+    H, W = frame.shape[:2]
+    dw, dh = int((x2 - x1) * pad), int((y2 - y1) * pad)
+    x1c = max(0, x1 - dw)
+    y1c = max(0, y1 - dh)
+    x2c = min(W, x2 + dw)
+    y2c = min(H, y2 + dh)
+    return frame[y1c:y2c, x1c:x2c]
 
 
 # ── Main ──────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description="Horse Re-ID inference")
-    parser.add_argument("--query",   required=True,        help="Query image path")
-    parser.add_argument("--gallery", required=True, nargs="+",
-                        help="Gallery: folder(s) or image file(s)")
-    parser.add_argument("--topk",    type=int, default=5,  help="Number of top matches (default 5)")
-    parser.add_argument("--ckpt",    default=CKPT_PATH,    help="Re-ID checkpoint path")
-    parser.add_argument("--yolo",    default=YOLO_MODEL,   help="YOLO model weights")
-    parser.add_argument("--no-save", action="store_true",  help="Skip saving result image")
+    parser = argparse.ArgumentParser(description="Horse Re-ID video inference")
+    parser.add_argument("--source",    required=True,           help="Input video path")
+    parser.add_argument("--output",    default=None,            help="Output video path (default: source_reid.mp4)")
+    parser.add_argument("--ckpt",      default=CKPT_PATH,       help="Re-ID checkpoint")
+    parser.add_argument("--yolo",      default=YOLO_MODEL,      help="YOLO weights")
+    parser.add_argument("--threshold", type=float, default=0.65,help="Re-ID similarity threshold")
+    parser.add_argument("--conf",      type=float, default=0.25,help="YOLO detection confidence")
+    parser.add_argument("--skip",      type=int,   default=1,   help="Process every N-th frame (default 1 = all)")
     args = parser.parse_args()
+
+    source = Path(args.source)
+    output = Path(args.output) if args.output else source.parent / f"{source.stem}_reid.mp4"
 
     cfg    = Config()
     device = cfg.DEVICE
-    print(f"Device: {device}")
+    print(f"Device  : {device}")
+    print(f"Source  : {source}")
+    print(f"Output  : {output}")
+    print(f"Threshold: {args.threshold}  |  YOLO conf: {args.conf}  |  Skip: {args.skip}")
 
     # Load models
-    model, cfg = load_reid_model(args.ckpt, device)
-    yolo = load_yolo(args.yolo)
+    reid_model, cfg = load_reid(args.ckpt, device)
 
-    # Collect gallery images
-    gallery_paths = collect_images(args.gallery)
-    gallery_paths = [p for p in gallery_paths if p.resolve() != Path(args.query).resolve()]
-    print(f"Gallery: {len(gallery_paths)} images")
+    from ultralytics import YOLO
+    yolo = YOLO(args.yolo)
 
-    if not gallery_paths:
-        print("No gallery images found. Exiting.")
+    tracker = HorseTracker(sim_threshold=args.threshold)
+
+    # Open video
+    cap = cv2.VideoCapture(str(source))
+    if not cap.isOpened():
+        print(f"Error: cannot open {source}")
         return
 
-    # Embed query
-    query_path = Path(args.query)
-    print(f"\nProcessing query: {query_path.name}")
-    query_crop = detect_horse_crop(yolo, query_path)
-    query_emb  = embed_image(model, query_crop, cfg, device)
+    W   = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    H   = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    print(f"Video   : {W}x{H} @ {fps:.1f}fps  ({total_frames} frames)")
 
-    # Embed gallery
-    print("Embedding gallery...")
-    gallery = []
-    for p in gallery_paths:
-        try:
-            crop = detect_horse_crop(yolo, p)
-            emb  = embed_image(model, crop, cfg, device)
-            sim  = F.cosine_similarity(query_emb.unsqueeze(0), emb.unsqueeze(0)).item()
-            gallery.append({"path": p, "crop": crop, "emb": emb, "sim": sim})
-        except Exception as e:
-            print(f"  [skip] {p.name}: {e}")
+    writer = cv2.VideoWriter(
+        str(output),
+        cv2.VideoWriter_fourcc(*"mp4v"),
+        fps / args.skip,
+        (W, H)
+    )
 
-    # Sort by similarity descending
-    gallery.sort(key=lambda x: x["sim"], reverse=True)
-    topk = min(args.topk, len(gallery))
-    top_results = gallery[:topk]
+    frame_idx = 0
+    processed = 0
 
-    # Print results
-    print(f"\nTop-{topk} matches for '{query_path.name}':")
-    print(f"{'Rank':<6} {'Similarity':>10}  {'File'}")
-    print("-" * 50)
-    for i, r in enumerate(top_results):
-        print(f"  #{i+1:<4} {r['sim']:>+.4f}      {r['path'].name}")
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
 
-    # Save visualisation
-    if not args.no_save:
-        out_path = Path(args.query).parent / f"reid_result_{query_path.stem}.png"
-        save_results(query_crop, query_path, top_results, out_path)
+        frame_idx += 1
+        if frame_idx % args.skip != 0:
+            continue
+
+        processed += 1
+        if processed % 30 == 0:
+            print(f"  Frame {frame_idx}/{total_frames}  |  IDs so far: {tracker.num_ids}")
+
+        # YOLO detect horses
+        results = yolo(frame, classes=[HORSE_CLS], conf=args.conf, verbose=False)
+        boxes   = results[0].boxes
+
+        if boxes is not None and len(boxes) > 0:
+            for box in boxes:
+                x1, y1, x2, y2 = box.xyxy[0].cpu().int().tolist()
+                det_conf = float(box.conf[0].cpu())
+
+                crop = get_crop(frame, x1, y1, x2, y2)
+                if crop.size == 0:
+                    continue
+
+                emb = embed(reid_model, crop, cfg, device)
+                horse_id, sim = tracker.assign(emb)
+                draw_box(frame, x1, y1, x2, y2, horse_id, sim, det_conf)
+
+        draw_gallery_overlay(frame, tracker)
+        writer.write(frame)
+
+    cap.release()
+    writer.release()
+    print(f"\nDone — {processed} frames processed, {tracker.num_ids} unique horse(s) found.")
+    print(f"Saved : {output}")
 
 
 if __name__ == "__main__":
