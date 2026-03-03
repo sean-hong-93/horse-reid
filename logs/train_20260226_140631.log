@@ -1,0 +1,270 @@
+Device: mps
+Backbone: mobilenetv4_conv_small
+Dataset: 28 identities, 7681 images
+Identity split — train: 22, val: 6
+Dataset: 22 identities, 6180 images
+Dataset: 6 identities, 1501 images
+Backbone output dim: 1280
+ArcFace head: num_ids=22, s=64.0, m=0.5
+
+Epoch 1/50
+----------------------------------------
+[Train] Loss: 43.0196  Triplet: 0.4111  ArcFace: 42.6085  d_ap: 1.193  d_an: 1.082
+[Val]   Triplet: 0.2552  d_ap: 0.681  d_an: 0.726
+  → Saved best model
+
+Epoch 2/50
+----------------------------------------
+[Train] Loss: 38.8317  Triplet: 0.4008  ArcFace: 38.4308  d_ap: 1.185  d_an: 1.084
+[Val]   Triplet: 0.2149  d_ap: 0.688  d_an: 0.773
+  → Saved best model
+
+Epoch 3/50
+----------------------------------------
+[Train] Loss: 37.3080  Triplet: 0.3950  ArcFace: 36.9130  d_ap: 1.177  d_an: 1.082
+[Val]   Triplet: 0.2933  d_ap: 0.796  d_an: 0.803
+
+Epoch 4/50
+----------------------------------------
+[Train] Loss: 36.3044  Triplet: 0.3784  ArcFace: 35.9260  d_ap: 1.164  d_an: 1.086
+[Val]   Triplet: 0.2924  d_ap: 0.819  d_an: 0.827
+
+Epoch 5/50
+----------------------------------------
+[Train] Loss: 33.0589  Triplet: 0.4013  ArcFace: 32.6576  d_ap: 1.173  d_an: 1.072
+[Val]   Triplet: 0.2721  d_ap: 0.879  d_an: 0.907
+
+Epoch 6/50
+----------------------------------------
+[Train] Loss: 34.0524  Triplet: 0.3836  ArcFace: 33.6688  d_ap: 1.165  d_an: 1.081
+[Val]   Triplet: 0.2667  d_ap: 0.894  d_an: 0.928
+
+Epoch 7/50
+----------------------------------------
+[Train] Loss: 32.0128  Triplet: 0.3778  ArcFace: 31.6350  d_ap: 1.163  d_an: 1.085
+[Val]   Triplet: 0.2584  d_ap: 0.914  d_an: 0.956
+
+Epoch 8/50
+----------------------------------------
+[Train] Loss: 30.8100  Triplet: 0.3681  ArcFace: 30.4419  d_ap: 1.144  d_an: 1.076
+[Val]   Triplet: 0.2604  d_ap: 0.925  d_an: 0.965
+
+Epoch 9/50
+----------------------------------------
+[Train] Loss: 30.8065  Triplet: 0.3395  ArcFace: 30.4670  d_ap: 1.129  d_an: 1.090
+[Val]   Triplet: 0.2656  d_ap: 0.907  d_an: 0.941
+
+Epoch 10/50
+----------------------------------------
+[Train] Loss: 28.7144  Triplet: 0.3282  ArcFace: 28.3862  d_ap: 1.106  d_an: 1.077
+[Val]   Triplet: 0.1924  d_ap: 0.867  d_an: 0.974
+  → Saved best model
+
+Epoch 11/50
+----------------------------------------
+[Train] Loss: 26.7760  Triplet: 0.3265  ArcFace: 26.4494  d_ap: 1.120  d_an: 1.094
+[Val]   Triplet: 0.2137  d_ap: 0.907  d_an: 0.993
+
+Epoch 12/50
+----------------------------------------
+[Train] Loss: 25.9250  Triplet: 0.3072  ArcFace: 25.6178  d_ap: 1.101  d_an: 1.094
+[Val]   Triplet: 0.1753  d_ap: 0.871  d_an: 1.000
+  → Saved best model
+
+Epoch 13/50
+----------------------------------------
+[Train] Loss: 23.9280  Triplet: 0.3087  ArcFace: 23.6193  d_ap: 1.102  d_an: 1.093
+[Val]   Triplet: 0.1907  d_ap: 0.869  d_an: 0.978
+
+Epoch 14/50
+----------------------------------------
+[Train] Loss: 22.9493  Triplet: 0.2691  ArcFace: 22.6803  d_ap: 1.082  d_an: 1.112
+[Val]   Triplet: 0.1567  d_ap: 0.866  d_an: 1.020
+  → Saved best model
+
+Epoch 15/50
+----------------------------------------
+[Train] Loss: 23.6382  Triplet: 0.2890  ArcFace: 23.3492  d_ap: 1.091  d_an: 1.102
+[Val]   Triplet: 0.1706  d_ap: 0.894  d_an: 1.028
+
+Epoch 16/50
+----------------------------------------
+[Train] Loss: 21.8334  Triplet: 0.2580  ArcFace: 21.5754  d_ap: 1.069  d_an: 1.112
+[Val]   Triplet: 0.1955  d_ap: 0.890  d_an: 0.994
+
+Epoch 17/50
+----------------------------------------
+[Train] Loss: 21.7873  Triplet: 0.2302  ArcFace: 21.5572  d_ap: 1.060  d_an: 1.134
+[Val]   Triplet: 0.1202  d_ap: 0.827  d_an: 1.014
+  → Saved best model
+
+Epoch 18/50
+----------------------------------------
+[Train] Loss: 18.2477  Triplet: 0.1940  ArcFace: 18.0537  d_ap: 1.034  d_an: 1.143
+[Val]   Triplet: 0.1567  d_ap: 0.891  d_an: 1.039
+
+Epoch 19/50
+----------------------------------------
+[Train] Loss: 17.4153  Triplet: 0.1934  ArcFace: 17.2218  d_ap: 1.036  d_an: 1.143
+[Val]   Triplet: 0.1736  d_ap: 0.884  d_an: 1.011
+
+Epoch 20/50
+----------------------------------------
+[Train] Loss: 18.3678  Triplet: 0.1947  ArcFace: 18.1731  d_ap: 1.049  d_an: 1.155
+[Val]   Triplet: 0.0885  d_ap: 0.837  d_an: 1.063
+  → Saved best model
+
+Epoch 21/50
+----------------------------------------
+[Train] Loss: 17.6885  Triplet: 0.2101  ArcFace: 17.4784  d_ap: 1.054  d_an: 1.146
+[Val]   Triplet: 0.0933  d_ap: 0.831  d_an: 1.057
+
+Epoch 22/50
+----------------------------------------
+[Train] Loss: 14.6413  Triplet: 0.1509  ArcFace: 14.4904  d_ap: 1.018  d_an: 1.176
+[Val]   Triplet: 0.1211  d_ap: 0.850  d_an: 1.077
+
+Epoch 23/50
+----------------------------------------
+[Train] Loss: 16.2736  Triplet: 0.2003  ArcFace: 16.0733  d_ap: 1.055  d_an: 1.156
+[Val]   Triplet: 0.1047  d_ap: 0.832  d_an: 1.071
+
+Epoch 24/50
+----------------------------------------
+[Train] Loss: 11.2201  Triplet: 0.0941  ArcFace: 11.1260  d_ap: 0.980  d_an: 1.205
+[Val]   Triplet: 0.1161  d_ap: 0.855  d_an: 1.063
+
+Epoch 25/50
+----------------------------------------
+[Train] Loss: 13.0610  Triplet: 0.1226  ArcFace: 12.9385  d_ap: 0.999  d_an: 1.186
+[Val]   Triplet: 0.1073  d_ap: 0.860  d_an: 1.077
+
+Epoch 26/50
+----------------------------------------
+[Train] Loss: 13.9845  Triplet: 0.1255  ArcFace: 13.8590  d_ap: 1.007  d_an: 1.196
+[Val]   Triplet: 0.1062  d_ap: 0.802  d_an: 1.067
+
+Epoch 27/50
+----------------------------------------
+[Train] Loss: 11.8615  Triplet: 0.1029  ArcFace: 11.7585  d_ap: 0.991  d_an: 1.207
+[Val]   Triplet: 0.0533  d_ap: 0.831  d_an: 1.122
+  → Saved best model
+
+Epoch 28/50
+----------------------------------------
+[Train] Loss: 11.0203  Triplet: 0.0861  ArcFace: 10.9342  d_ap: 0.976  d_an: 1.215
+[Val]   Triplet: 0.1299  d_ap: 0.857  d_an: 1.063
+
+Epoch 29/50
+----------------------------------------
+[Train] Loss: 12.6349  Triplet: 0.1435  ArcFace: 12.4914  d_ap: 1.027  d_an: 1.198
+[Val]   Triplet: 0.0675  d_ap: 0.813  d_an: 1.109
+
+Epoch 30/50
+----------------------------------------
+[Train] Loss: 10.0381  Triplet: 0.0796  ArcFace: 9.9585  d_ap: 0.977  d_an: 1.234
+[Val]   Triplet: 0.0668  d_ap: 0.823  d_an: 1.087
+
+Epoch 31/50
+----------------------------------------
+[Train] Loss: 11.3774  Triplet: 0.1092  ArcFace: 11.2682  d_ap: 1.032  d_an: 1.227
+[Val]   Triplet: 0.0453  d_ap: 0.820  d_an: 1.128
+  → Saved best model
+
+Epoch 32/50
+----------------------------------------
+[Train] Loss: 11.9695  Triplet: 0.1055  ArcFace: 11.8640  d_ap: 1.008  d_an: 1.221
+[Val]   Triplet: 0.0998  d_ap: 0.838  d_an: 1.085
+
+Epoch 33/50
+----------------------------------------
+[Train] Loss: 9.7447  Triplet: 0.1066  ArcFace: 9.6381  d_ap: 1.017  d_an: 1.219
+[Val]   Triplet: 0.0985  d_ap: 0.831  d_an: 1.128
+
+Epoch 34/50
+----------------------------------------
+[Train] Loss: 9.2580  Triplet: 0.0671  ArcFace: 9.1909  d_ap: 0.968  d_an: 1.230
+[Val]   Triplet: 0.1286  d_ap: 0.890  d_an: 1.085
+
+Epoch 35/50
+----------------------------------------
+[Train] Loss: 8.6455  Triplet: 0.0678  ArcFace: 8.5777  d_ap: 0.976  d_an: 1.233
+[Val]   Triplet: 0.0801  d_ap: 0.830  d_an: 1.117
+
+Epoch 36/50
+----------------------------------------
+[Train] Loss: 9.6710  Triplet: 0.0771  ArcFace: 9.5939  d_ap: 0.994  d_an: 1.231
+[Val]   Triplet: 0.1221  d_ap: 0.838  d_an: 1.091
+
+Epoch 37/50
+----------------------------------------
+[Train] Loss: 7.9319  Triplet: 0.0727  ArcFace: 7.8592  d_ap: 0.983  d_an: 1.241
+[Val]   Triplet: 0.1012  d_ap: 0.827  d_an: 1.120
+
+Epoch 38/50
+----------------------------------------
+[Train] Loss: 9.5583  Triplet: 0.0832  ArcFace: 9.4750  d_ap: 0.988  d_an: 1.238
+[Val]   Triplet: 0.0740  d_ap: 0.822  d_an: 1.112
+
+Epoch 39/50
+----------------------------------------
+[Train] Loss: 9.2868  Triplet: 0.0665  ArcFace: 9.2203  d_ap: 0.996  d_an: 1.242
+[Val]   Triplet: 0.0811  d_ap: 0.823  d_an: 1.129
+
+Epoch 40/50
+----------------------------------------
+[Train] Loss: 10.0138  Triplet: 0.0808  ArcFace: 9.9329  d_ap: 0.998  d_an: 1.244
+[Val]   Triplet: 0.0877  d_ap: 0.851  d_an: 1.110
+
+Epoch 41/50
+----------------------------------------
+[Train] Loss: 9.3402  Triplet: 0.0878  ArcFace: 9.2523  d_ap: 0.994  d_an: 1.228
+[Val]   Triplet: 0.0993  d_ap: 0.846  d_an: 1.111
+
+Epoch 42/50
+----------------------------------------
+[Train] Loss: 9.1167  Triplet: 0.0753  ArcFace: 9.0414  d_ap: 0.997  d_an: 1.240
+[Val]   Triplet: 0.0471  d_ap: 0.756  d_an: 1.115
+
+Epoch 43/50
+----------------------------------------
+[Train] Loss: 9.7613  Triplet: 0.1213  ArcFace: 9.6400  d_ap: 1.036  d_an: 1.233
+[Val]   Triplet: 0.0744  d_ap: 0.838  d_an: 1.139
+
+Epoch 44/50
+----------------------------------------
+[Train] Loss: 7.6440  Triplet: 0.0561  ArcFace: 7.5879  d_ap: 0.966  d_an: 1.259
+[Val]   Triplet: 0.0849  d_ap: 0.819  d_an: 1.119
+
+Epoch 45/50
+----------------------------------------
+[Train] Loss: 6.8577  Triplet: 0.0421  ArcFace: 6.8156  d_ap: 0.958  d_an: 1.262
+[Val]   Triplet: 0.1056  d_ap: 0.840  d_an: 1.102
+
+Epoch 46/50
+----------------------------------------
+[Train] Loss: 7.3117  Triplet: 0.0730  ArcFace: 7.2387  d_ap: 0.971  d_an: 1.245
+[Val]   Triplet: 0.0832  d_ap: 0.802  d_an: 1.102
+
+Epoch 47/50
+----------------------------------------
+[Train] Loss: 6.8410  Triplet: 0.0550  ArcFace: 6.7860  d_ap: 0.976  d_an: 1.252
+[Val]   Triplet: 0.0992  d_ap: 0.835  d_an: 1.093
+
+Epoch 48/50
+----------------------------------------
+[Train] Loss: 7.8743  Triplet: 0.0979  ArcFace: 7.7764  d_ap: 1.017  d_an: 1.237
+[Val]   Triplet: 0.0558  d_ap: 0.795  d_an: 1.135
+
+Epoch 49/50
+----------------------------------------
+[Train] Loss: 8.8440  Triplet: 0.0530  ArcFace: 8.7910  d_ap: 0.976  d_an: 1.250
+[Val]   Triplet: 0.0961  d_ap: 0.834  d_an: 1.116
+
+Epoch 50/50
+----------------------------------------
+[Train] Loss: 6.9654  Triplet: 0.0609  ArcFace: 6.9046  d_ap: 0.978  d_an: 1.243
+[Val]   Triplet: 0.0953  d_ap: 0.818  d_an: 1.125
+
+Training complete!
+Best val triplet loss: 0.0453

@@ -1,0 +1,30 @@
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+
+# Large model weights
+*.pth
+*.onnx
+*.onnx.data
+*.tflite
+*.safetensors
+yolo*.pt
+
+# Checkpoints
+checkpoints/
+
+# Images
+*.png
+*.jpg
+*.jpeg
+
+# Notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# Claude internal
+.claude/
+
+# Log plots (keep .log, drop .png)
+logs/*.png
