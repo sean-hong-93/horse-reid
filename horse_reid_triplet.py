@@ -5,7 +5,9 @@ Horse Re-ID using Triplet Loss with MobileNetV4 Small backbone
 import math
 import os
 import random
+import sys
 from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
 from typing import List, Dict
 
@@ -58,6 +60,7 @@ class Config:
 
     # Save
     SAVE_DIR = "/Users/3i-a1-2022-062/Sean/workspace/RE-ID/checkpoints"
+    LOG_DIR  = "/Users/3i-a1-2022-062/Sean/workspace/RE-ID/logs"
 
 
 # =============================================================================
@@ -424,9 +427,45 @@ def evaluate(model, dataloader, criterion, device):
     return total_loss/n, total_dist_ap/n, total_dist_an/n
 
 
+class Logger:
+    """Tees all print() output to both stdout and a timestamped log file."""
+
+    def __init__(self, log_dir: str):
+        os.makedirs(log_dir, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.log_path = Path(log_dir) / f"train_{timestamp}.log"
+        self._file = open(self.log_path, "w", buffering=1)  # line-buffered
+        self._stdout = sys.stdout
+        sys.stdout = self
+        print(f"Logging to: {self.log_path}")
+
+    def write(self, msg):
+        self._stdout.write(msg)
+        self._file.write(msg)
+
+    def flush(self):
+        self._stdout.flush()
+        self._file.flush()
+
+    def close(self):
+        sys.stdout = self._stdout
+        self._file.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self.close()
+
+
 def main():
     cfg = Config()
 
+    with Logger(log_dir=cfg.LOG_DIR):
+        _main(cfg)
+
+
+def _main(cfg):
     print(f"Device: {cfg.DEVICE}")
     print(f"Backbone: {cfg.BACKBONE}")
 
