@@ -5,7 +5,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 
-LOG_DIR = Path("/Users/3i-a1-2022-062/Sean/workspace/RE-ID/logs")
+LOG_DIR = Path("./logs")
 
 # Pick the most recent log if not specified
 if len(sys.argv) > 1:

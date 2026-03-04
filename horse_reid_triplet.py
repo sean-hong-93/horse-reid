@@ -5,7 +5,9 @@ Horse Re-ID using Triplet Loss with MobileNetV4 Small backbone
 import math
 import os
 import random
+import sys
 from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
 from typing import List, Dict
 
@@ -24,8 +26,8 @@ import timm
 
 class Config:
     # Data
-    DATA_ROOT = "/Volumes/skuley/3i/videos/workspace/dataset/horse_feature_extractor/train"
-    VAL_DIR   = "/Volumes/skuley/3i/videos/workspace/dataset/horse_feature_extractor/val"
+    DATA_ROOT = "/home/jovyan/deploy-rnd/dev8/root/storage/datasets/horse_feature_extractor/train"
+    VAL_DIR   = "/home/jovyan/deploy-rnd/dev8/root/storage/datasets/horse_feature_extractor/val"
     EXCLUDE_FOLDERS = []
 
     # Model
@@ -34,30 +36,33 @@ class Config:
     PRETRAINED = True
 
     # Training — PK sampling: P identities × K images per batch
-    P = 4              # Identities per batch  (12//4=3 batches/epoch)
+    P = 12              # Identities per batch  (12//4=3 batches/epoch)
     K = 8              # Images per identity  →  effective batch size = P*K = 32
-    NUM_EPOCHS = 150
+    NUM_EPOCHS = 500
     LEARNING_RATE = 1e-4
 
     # Resume
-    RESUME = True
-    RESUME_CKPT = "/Users/3i-a1-2022-062/Sean/workspace/RE-ID/checkpoints/best_horse_reid.pth"
+    RESUME = False
+    RESUME_CKPT = "./checkpoints/best_horse_reid.pth"
     MARGIN = 0.3       # Batch-hard triplet margin
 
     # ArcFace
     USE_ARCFACE = True
     ARCFACE_S = 64.0   # Feature scale
     ARCFACE_M = 0.5    # Angular margin (~28.6°)
-    ARCFACE_WEIGHT = 1.0  # Weight of ArcFace loss relative to Triplet loss
+    ARCFACE_WEIGHT = 0.1  # Weight of ArcFace loss relative to Triplet loss
+
+    # Gradual unfreezing
+    FREEZE_BACKBONE_EPOCHS = 20  # Freeze backbone for first N epochs
 
     # Image
-    IMG_SIZE = (480, 480)
+    IMG_SIZE = (224, 224)
 
     # Device
-    DEVICE = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
+    DEVICE = torch.device("cuda:1" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
 
     # Save
-    SAVE_DIR = "/Users/3i-a1-2022-062/Sean/workspace/RE-ID/checkpoints"
+    SAVE_DIR = "./checkpoints"
 
 
 # =============================================================================
@@ -254,6 +259,18 @@ class HorseReIDModel(nn.Module):
         """Returns scaled cosine logits with angular margin for the ArcFace loss."""
         return self.arcface(embeddings, labels)
 
+    def freeze_backbone(self):
+        """Freeze backbone parameters so only embedding + ArcFace heads train."""
+        for param in self.backbone.parameters():
+            param.requires_grad = False
+        print("Backbone FROZEN")
+
+    def unfreeze_backbone(self):
+        """Unfreeze backbone parameters for end-to-end fine-tuning."""
+        for param in self.backbone.parameters():
+            param.requires_grad = True
+        print("Backbone UNFROZEN")
+
 
 # =============================================================================
 # ArcFace Head
@@ -427,6 +444,25 @@ def evaluate(model, dataloader, criterion, device):
 def main():
     cfg = Config()
 
+    # Setup logging to file
+    os.makedirs("./logs", exist_ok=True)
+    log_path = f"./logs/train_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+    log_file = open(log_path, "w")
+
+    class Tee:
+        """Write to both stdout and log file."""
+        def __init__(self, *files):
+            self.files = files
+        def write(self, msg):
+            for f in self.files:
+                f.write(msg)
+                f.flush()
+        def flush(self):
+            for f in self.files:
+                f.flush()
+
+    sys.stdout = Tee(sys.__stdout__, log_file)
+
     print(f"Device: {cfg.DEVICE}")
     print(f"Backbone: {cfg.BACKBONE}")
 
@@ -476,6 +512,10 @@ def main():
         arcface_m=cfg.ARCFACE_M,
     ).to(cfg.DEVICE)
 
+    # Freeze backbone initially for gradual unfreezing
+    backbone_frozen = True
+    model.freeze_backbone()
+
     # Loss & Optimizer
     criterion = BatchHardTripletLoss(margin=cfg.MARGIN)
     optimizer = torch.optim.AdamW(model.parameters(), lr=cfg.LEARNING_RATE, weight_decay=1e-4)
@@ -498,6 +538,19 @@ def main():
         print(f"Resumed from epoch {ckpt['epoch'] + 1}  (best val loss so far: {best_val_loss:.4f})")
 
     for epoch in range(start_epoch, cfg.NUM_EPOCHS):
+        # Gradual unfreezing: unfreeze backbone after warmup epochs
+        if backbone_frozen and epoch >= cfg.FREEZE_BACKBONE_EPOCHS:
+            model.unfreeze_backbone()
+            backbone_frozen = False
+            # Re-create optimizer to include backbone params with a lower LR
+            optimizer = torch.optim.AdamW([
+                {'params': model.backbone.parameters(), 'lr': cfg.LEARNING_RATE * 0.1},
+                {'params': model.embedding.parameters()},
+                {'params': model.arcface.parameters()},
+            ], lr=cfg.LEARNING_RATE, weight_decay=1e-4)
+            scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
+                optimizer, T_0=30, T_mult=1, eta_min=1e-6
+            )
         print(f"\nEpoch {epoch + 1}/{cfg.NUM_EPOCHS}  (lr={scheduler.get_last_lr()[0]:.2e})")
         print("-" * 40)
 
