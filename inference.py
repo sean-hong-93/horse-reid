@@ -27,10 +27,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 from horse_reid_triplet import HorseReIDModel, Config
 
 # ── Constants ─────────────────────────────────────────────────
-HORSE_CLS  = 17      # COCO class id for horse
+HORSE_CLS  = 0       # Class id for horse in custom YOLO model
 CROP_PAD   = 0.10    # padding fraction around YOLO box
-CKPT_PATH  = "/Users/3i-a1-2022-062/Sean/workspace/RE-ID/checkpoints/best_horse_reid.pth"
-YOLO_MODEL = "yolo11n.pt"
+CKPT_PATH  = "checkpoints/best_horse_reid.pth"
+YOLO_MODEL = "yolo11n_480_kd_diff_hyp_best_ATH.pt"
 
 # Distinct colors per horse ID (BGR for OpenCV)
 ID_COLORS = [
@@ -188,7 +188,7 @@ def main():
     parser.add_argument("--ckpt",      default=CKPT_PATH,       help="Re-ID checkpoint")
     parser.add_argument("--yolo",      default=YOLO_MODEL,      help="YOLO weights")
     parser.add_argument("--threshold", type=float, default=0.65,help="Re-ID similarity threshold")
-    parser.add_argument("--conf",      type=float, default=0.25,help="YOLO detection confidence")
+    parser.add_argument("--conf",      type=float, default=0.7,help="YOLO detection confidence")
     parser.add_argument("--skip",      type=int,   default=1,   help="Process every N-th frame (default 1 = all)")
     args = parser.parse_args()
 
@@ -231,6 +231,7 @@ def main():
 
     frame_idx = 0
     processed = 0
+    is_first_frame = True
 
     while True:
         ret, frame = cap.read()
@@ -250,17 +251,34 @@ def main():
         boxes   = results[0].boxes
 
         if boxes is not None and len(boxes) > 0:
-            for box in boxes:
-                x1, y1, x2, y2 = box.xyxy[0].cpu().int().tolist()
-                det_conf = float(box.conf[0].cpu())
+            if is_first_frame:
+                # First frame: register every detection as a new horse without
+                # comparing within the same frame (avoids merging similar horses)
+                print(f"  [first frame] Seeding gallery with {len(boxes)} detection(s)")
+                for box in boxes:
+                    x1, y1, x2, y2 = box.xyxy[0].cpu().int().tolist()
+                    det_conf = float(box.conf[0].cpu())
 
-                crop = get_crop(frame, x1, y1, x2, y2)
-                if crop.size == 0:
-                    continue
+                    crop = get_crop(frame, x1, y1, x2, y2)
+                    if crop.size == 0:
+                        continue
 
-                emb = embed(reid_model, crop, cfg, device)
-                horse_id, sim = tracker.assign(emb)
-                draw_box(frame, x1, y1, x2, y2, horse_id, sim, det_conf)
+                    emb = embed(reid_model, crop, cfg, device)
+                    horse_id = tracker._new_id(emb)
+                    draw_box(frame, x1, y1, x2, y2, horse_id, 0.0, det_conf)
+                is_first_frame = False
+            else:
+                for box in boxes:
+                    x1, y1, x2, y2 = box.xyxy[0].cpu().int().tolist()
+                    det_conf = float(box.conf[0].cpu())
+
+                    crop = get_crop(frame, x1, y1, x2, y2)
+                    if crop.size == 0:
+                        continue
+
+                    emb = embed(reid_model, crop, cfg, device)
+                    horse_id, sim = tracker.assign(emb)
+                    draw_box(frame, x1, y1, x2, y2, horse_id, sim, det_conf)
 
         draw_gallery_overlay(frame, tracker)
         writer.write(frame)
