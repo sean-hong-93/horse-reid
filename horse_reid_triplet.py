@@ -441,6 +441,37 @@ def evaluate(model, dataloader, criterion, device):
     return total_loss/n, total_dist_ap/n, total_dist_an/n
 
 
+class Logger:
+    """Tees all print() output to both stdout and a timestamped log file."""
+
+    def __init__(self, log_dir: str):
+        os.makedirs(log_dir, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.log_path = Path(log_dir) / f"train_{timestamp}.log"
+        self._file = open(self.log_path, "w", buffering=1)  # line-buffered
+        self._stdout = sys.stdout
+        sys.stdout = self
+        print(f"Logging to: {self.log_path}")
+
+    def write(self, msg):
+        self._stdout.write(msg)
+        self._file.write(msg)
+
+    def flush(self):
+        self._stdout.flush()
+        self._file.flush()
+
+    def close(self):
+        sys.stdout = self._stdout
+        self._file.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self.close()
+
+
 def main():
     cfg = Config()
 
@@ -462,6 +493,7 @@ def main():
                 f.flush()
 
     sys.stdout = Tee(sys.__stdout__, log_file)
+
 
     print(f"Device: {cfg.DEVICE}")
     print(f"Backbone: {cfg.BACKBONE}")

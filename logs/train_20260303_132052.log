@@ -214,3 +214,408 @@ Epoch 69/150  (lr=7.52e-05)
 
 Epoch 70/150  (lr=7.06e-05)
 ----------------------------------------
+[Train] Loss: 24.1229  Triplet: 0.3944  ArcFace: 23.7285  d_ap: 1.205  d_an: 1.110
+[Val]   Triplet: 0.4184  d_ap: 1.152  d_an: 1.034
+
+Epoch 71/150  (lr=6.58e-05)
+----------------------------------------
+[Train] Loss: 24.9104  Triplet: 0.4180  ArcFace: 24.4925  d_ap: 1.230  d_an: 1.112
+[Val]   Triplet: 0.4649  d_ap: 1.182  d_an: 1.017
+
+Epoch 72/150  (lr=6.08e-05)
+----------------------------------------
+[Train] Loss: 24.4252  Triplet: 0.4094  ArcFace: 24.0157  d_ap: 1.219  d_an: 1.110
+[Val]   Triplet: 0.4086  d_ap: 1.079  d_an: 0.971
+
+Epoch 73/150  (lr=5.57e-05)
+----------------------------------------
+[Train] Loss: 24.7238  Triplet: 0.3787  ArcFace: 24.3452  d_ap: 1.219  d_an: 1.140
+[Val]   Triplet: 0.3659  d_ap: 1.075  d_an: 1.009
+
+Epoch 74/150  (lr=5.05e-05)
+----------------------------------------
+[Train] Loss: 22.9503  Triplet: 0.3956  ArcFace: 22.5547  d_ap: 1.212  d_an: 1.116
+[Val]   Triplet: 0.4294  d_ap: 1.136  d_an: 1.007
+
+Epoch 75/150  (lr=4.53e-05)
+----------------------------------------
+[Train] Loss: 23.3804  Triplet: 0.3804  ArcFace: 23.0000  d_ap: 1.198  d_an: 1.118
+[Val]   Triplet: 0.2935  d_ap: 1.021  d_an: 1.027
+
+Epoch 76/150  (lr=4.02e-05)
+----------------------------------------
+[Train] Loss: 22.5364  Triplet: 0.3635  ArcFace: 22.1730  d_ap: 1.187  d_an: 1.124
+[Val]   Triplet: 0.3912  d_ap: 1.123  d_an: 1.032
+
+Epoch 77/150  (lr=3.52e-05)
+----------------------------------------
+[Train] Loss: 23.1546  Triplet: 0.3793  ArcFace: 22.7754  d_ap: 1.186  d_an: 1.106
+[Val]   Triplet: 0.3922  d_ap: 1.173  d_an: 1.081
+
+Epoch 78/150  (lr=3.04e-05)
+----------------------------------------
+[Train] Loss: 22.0377  Triplet: 0.3525  ArcFace: 21.6852  d_ap: 1.172  d_an: 1.120
+[Val]   Triplet: 0.3757  d_ap: 1.122  d_an: 1.046
+
+Epoch 79/150  (lr=2.58e-05)
+----------------------------------------
+[Train] Loss: 21.7917  Triplet: 0.3729  ArcFace: 21.4188  d_ap: 1.196  d_an: 1.124
+[Val]   Triplet: 0.4116  d_ap: 1.159  d_an: 1.048
+
+Epoch 80/150  (lr=2.14e-05)
+----------------------------------------
+[Train] Loss: 23.3194  Triplet: 0.4124  ArcFace: 22.9069  d_ap: 1.210  d_an: 1.097
+[Val]   Triplet: 0.4092  d_ap: 1.148  d_an: 1.039
+
+Epoch 81/150  (lr=1.74e-05)
+----------------------------------------
+[Train] Loss: 22.4694  Triplet: 0.3461  ArcFace: 22.1233  d_ap: 1.185  d_an: 1.143
+[Val]   Triplet: 0.4274  d_ap: 1.210  d_an: 1.082
+
+Epoch 82/150  (lr=1.37e-05)
+----------------------------------------
+[Train] Loss: 22.7569  Triplet: 0.3932  ArcFace: 22.3637  d_ap: 1.203  d_an: 1.110
+[Val]   Triplet: 0.3891  d_ap: 1.140  d_an: 1.051
+
+Epoch 83/150  (lr=1.05e-05)
+----------------------------------------
+[Train] Loss: 22.6413  Triplet: 0.3822  ArcFace: 22.2590  d_ap: 1.208  d_an: 1.127
+[Val]   Triplet: 0.4395  d_ap: 1.141  d_an: 1.002
+
+Epoch 84/150  (lr=7.63e-06)
+----------------------------------------
+[Train] Loss: 22.9135  Triplet: 0.4207  ArcFace: 22.4928  d_ap: 1.218  d_an: 1.098
+[Val]   Triplet: 0.3667  d_ap: 1.160  d_an: 1.093
+
+Epoch 85/150  (lr=5.28e-06)
+----------------------------------------
+[Train] Loss: 22.1430  Triplet: 0.4038  ArcFace: 21.7391  d_ap: 1.204  d_an: 1.101
+[Val]   Triplet: 0.3748  d_ap: 1.173  d_an: 1.098
+
+Epoch 86/150  (lr=3.42e-06)
+----------------------------------------
+[Train] Loss: 22.2785  Triplet: 0.3816  ArcFace: 21.8970  d_ap: 1.225  d_an: 1.143
+[Val]   Triplet: 0.3457  d_ap: 1.114  d_an: 1.068
+
+Epoch 87/150  (lr=2.08e-06)
+----------------------------------------
+[Train] Loss: 23.0388  Triplet: 0.3765  ArcFace: 22.6623  d_ap: 1.191  d_an: 1.114
+[Val]   Triplet: 0.3412  d_ap: 1.105  d_an: 1.064
+
+Epoch 88/150  (lr=1.27e-06)
+----------------------------------------
+[Train] Loss: 22.7949  Triplet: 0.3715  ArcFace: 22.4234  d_ap: 1.177  d_an: 1.106
+[Val]   Triplet: 0.4010  d_ap: 1.141  d_an: 1.040
+
+Epoch 89/150  (lr=1.00e-04)
+----------------------------------------
+[Train] Loss: 21.2498  Triplet: 0.3276  ArcFace: 20.9222  d_ap: 1.174  d_an: 1.147
+[Val]   Triplet: 0.3489  d_ap: 1.172  d_an: 1.123
+
+Epoch 90/150  (lr=9.97e-05)
+----------------------------------------
+[Train] Loss: 22.2847  Triplet: 0.3687  ArcFace: 21.9160  d_ap: 1.181  d_an: 1.113
+[Val]   Triplet: 0.3238  d_ap: 1.116  d_an: 1.092
+
+Epoch 91/150  (lr=9.89e-05)
+----------------------------------------
+[Train] Loss: 22.2788  Triplet: 0.3766  ArcFace: 21.9023  d_ap: 1.191  d_an: 1.116
+[Val]   Triplet: 0.3897  d_ap: 1.101  d_an: 1.011
+
+Epoch 92/150  (lr=9.76e-05)
+----------------------------------------
+[Train] Loss: 22.1307  Triplet: 0.3558  ArcFace: 21.7749  d_ap: 1.188  d_an: 1.132
+[Val]   Triplet: 0.3788  d_ap: 1.047  d_an: 0.968
+
+Epoch 93/150  (lr=9.57e-05)
+----------------------------------------
+[Train] Loss: 23.3762  Triplet: 0.3812  ArcFace: 22.9951  d_ap: 1.207  d_an: 1.128
+[Val]   Triplet: 0.3736  d_ap: 1.044  d_an: 0.971
+
+Epoch 94/150  (lr=9.34e-05)
+----------------------------------------
+[Train] Loss: 21.2056  Triplet: 0.3277  ArcFace: 20.8779  d_ap: 1.179  d_an: 1.153
+[Val]   Triplet: 0.3567  d_ap: 1.053  d_an: 0.996
+
+Epoch 95/150  (lr=9.05e-05)
+----------------------------------------
+[Train] Loss: 21.8315  Triplet: 0.3945  ArcFace: 21.4370  d_ap: 1.208  d_an: 1.114
+[Val]   Triplet: 0.3978  d_ap: 1.087  d_an: 0.989
+
+Epoch 96/150  (lr=8.73e-05)
+----------------------------------------
+[Train] Loss: 20.0938  Triplet: 0.3438  ArcFace: 19.7500  d_ap: 1.172  d_an: 1.135
+[Val]   Triplet: 0.4230  d_ap: 1.180  d_an: 1.057
+
+Epoch 97/150  (lr=8.36e-05)
+----------------------------------------
+[Train] Loss: 22.7068  Triplet: 0.4145  ArcFace: 22.2922  d_ap: 1.229  d_an: 1.117
+[Val]   Triplet: 0.3996  d_ap: 1.148  d_an: 1.049
+
+Epoch 98/150  (lr=7.96e-05)
+----------------------------------------
+[Train] Loss: 20.6879  Triplet: 0.3582  ArcFace: 20.3297  d_ap: 1.181  d_an: 1.126
+[Val]   Triplet: 0.4244  d_ap: 1.087  d_an: 0.963
+
+Epoch 99/150  (lr=7.52e-05)
+----------------------------------------
+[Train] Loss: 22.4706  Triplet: 0.3409  ArcFace: 22.1297  d_ap: 1.177  d_an: 1.136
+[Val]   Triplet: 0.3249  d_ap: 1.021  d_an: 0.996
+
+Epoch 100/150  (lr=7.06e-05)
+----------------------------------------
+[Train] Loss: 19.8826  Triplet: 0.3462  ArcFace: 19.5364  d_ap: 1.159  d_an: 1.116
+[Val]   Triplet: 0.4449  d_ap: 1.061  d_an: 0.916
+
+Epoch 101/150  (lr=6.58e-05)
+----------------------------------------
+[Train] Loss: 23.2212  Triplet: 0.3987  ArcFace: 22.8225  d_ap: 1.236  d_an: 1.137
+[Val]   Triplet: 0.3884  d_ap: 0.997  d_an: 0.909
+
+Epoch 102/150  (lr=6.08e-05)
+----------------------------------------
+[Train] Loss: 21.2208  Triplet: 0.3728  ArcFace: 20.8480  d_ap: 1.198  d_an: 1.127
+[Val]   Triplet: 0.3824  d_ap: 1.070  d_an: 0.988
+
+Epoch 103/150  (lr=5.57e-05)
+----------------------------------------
+[Train] Loss: 20.2820  Triplet: 0.3720  ArcFace: 19.9100  d_ap: 1.188  d_an: 1.117
+[Val]   Triplet: 0.4014  d_ap: 1.096  d_an: 0.995
+
+Epoch 104/150  (lr=5.05e-05)
+----------------------------------------
+[Train] Loss: 22.3304  Triplet: 0.4218  ArcFace: 21.9086  d_ap: 1.258  d_an: 1.136
+[Val]   Triplet: 0.5051  d_ap: 1.147  d_an: 0.942
+
+Epoch 105/150  (lr=4.53e-05)
+----------------------------------------
+[Train] Loss: 22.4971  Triplet: 0.3928  ArcFace: 22.1043  d_ap: 1.246  d_an: 1.153
+[Val]   Triplet: 0.4699  d_ap: 1.115  d_an: 0.945
+
+Epoch 106/150  (lr=4.02e-05)
+----------------------------------------
+[Train] Loss: 20.7140  Triplet: 0.3408  ArcFace: 20.3732  d_ap: 1.183  d_an: 1.143
+[Val]   Triplet: 0.3229  d_ap: 1.106  d_an: 1.083
+
+Epoch 107/150  (lr=3.52e-05)
+----------------------------------------
+[Train] Loss: 21.9934  Triplet: 0.3705  ArcFace: 21.6229  d_ap: 1.197  d_an: 1.130
+[Val]   Triplet: 0.4491  d_ap: 1.169  d_an: 1.020
+
+Epoch 108/150  (lr=3.04e-05)
+----------------------------------------
+[Train] Loss: 20.9632  Triplet: 0.3620  ArcFace: 20.6012  d_ap: 1.201  d_an: 1.140
+[Val]   Triplet: 0.4351  d_ap: 1.172  d_an: 1.037
+
+Epoch 109/150  (lr=2.58e-05)
+----------------------------------------
+[Train] Loss: 21.4055  Triplet: 0.3267  ArcFace: 21.0788  d_ap: 1.173  d_an: 1.152
+[Val]   Triplet: 0.3771  d_ap: 1.080  d_an: 1.003
+
+Epoch 110/150  (lr=2.14e-05)
+----------------------------------------
+[Train] Loss: 18.1672  Triplet: 0.2932  ArcFace: 17.8740  d_ap: 1.129  d_an: 1.142
+[Val]   Triplet: 0.4096  d_ap: 1.128  d_an: 1.019
+
+Epoch 111/150  (lr=1.74e-05)
+----------------------------------------
+[Train] Loss: 18.9864  Triplet: 0.2788  ArcFace: 18.7076  d_ap: 1.144  d_an: 1.173
+[Val]   Triplet: 0.3343  d_ap: 1.124  d_an: 1.090
+
+Epoch 112/150  (lr=1.37e-05)
+----------------------------------------
+[Train] Loss: 19.2475  Triplet: 0.3410  ArcFace: 18.9064  d_ap: 1.198  d_an: 1.162
+[Val]   Triplet: 0.3331  d_ap: 1.088  d_an: 1.055
+
+Epoch 113/150  (lr=1.05e-05)
+----------------------------------------
+[Train] Loss: 19.0114  Triplet: 0.3106  ArcFace: 18.7008  d_ap: 1.141  d_an: 1.133
+[Val]   Triplet: 0.3941  d_ap: 1.091  d_an: 0.997
+
+Epoch 114/150  (lr=7.63e-06)
+----------------------------------------
+[Train] Loss: 18.9825  Triplet: 0.3126  ArcFace: 18.6699  d_ap: 1.152  d_an: 1.143
+[Val]   Triplet: 0.4407  d_ap: 1.159  d_an: 1.019
+
+Epoch 115/150  (lr=5.28e-06)
+----------------------------------------
+[Train] Loss: 18.5315  Triplet: 0.3315  ArcFace: 18.2000  d_ap: 1.162  d_an: 1.135
+[Val]   Triplet: 0.3207  d_ap: 1.119  d_an: 1.098
+
+Epoch 116/150  (lr=3.42e-06)
+----------------------------------------
+[Train] Loss: 21.2303  Triplet: 0.3651  ArcFace: 20.8651  d_ap: 1.224  d_an: 1.160
+[Val]   Triplet: 0.4186  d_ap: 1.144  d_an: 1.025
+
+Epoch 117/150  (lr=2.08e-06)
+----------------------------------------
+[Train] Loss: 19.2757  Triplet: 0.3130  ArcFace: 18.9627  d_ap: 1.169  d_an: 1.160
+[Val]   Triplet: 0.4418  d_ap: 1.149  d_an: 1.007
+
+Epoch 118/150  (lr=1.27e-06)
+----------------------------------------
+[Train] Loss: 22.3418  Triplet: 0.3867  ArcFace: 21.9550  d_ap: 1.223  d_an: 1.136
+[Val]   Triplet: 0.4208  d_ap: 1.137  d_an: 1.017
+
+Epoch 119/150  (lr=1.00e-04)
+----------------------------------------
+[Train] Loss: 19.2857  Triplet: 0.3085  ArcFace: 18.9772  d_ap: 1.166  d_an: 1.165
+[Val]   Triplet: 0.3476  d_ap: 1.027  d_an: 0.980
+
+Epoch 120/150  (lr=9.97e-05)
+----------------------------------------
+[Train] Loss: 20.1749  Triplet: 0.3421  ArcFace: 19.8328  d_ap: 1.180  d_an: 1.142
+[Val]   Triplet: 0.3425  d_ap: 1.058  d_an: 1.015
+
+Epoch 121/150  (lr=9.89e-05)
+----------------------------------------
+[Train] Loss: 18.9499  Triplet: 0.3236  ArcFace: 18.6263  d_ap: 1.157  d_an: 1.136
+[Val]   Triplet: 0.3928  d_ap: 1.157  d_an: 1.064
+
+Epoch 122/150  (lr=9.76e-05)
+----------------------------------------
+[Train] Loss: 19.2892  Triplet: 0.3426  ArcFace: 18.9467  d_ap: 1.184  d_an: 1.145
+[Val]   Triplet: 0.4407  d_ap: 1.130  d_an: 0.990
+
+Epoch 123/150  (lr=9.57e-05)
+----------------------------------------
+[Train] Loss: 19.7209  Triplet: 0.3270  ArcFace: 19.3939  d_ap: 1.176  d_an: 1.154
+[Val]   Triplet: 0.3922  d_ap: 1.036  d_an: 0.944
+
+Epoch 124/150  (lr=9.34e-05)
+----------------------------------------
+[Train] Loss: 22.0649  Triplet: 0.3611  ArcFace: 21.7038  d_ap: 1.238  d_an: 1.177
+[Val]   Triplet: 0.4337  d_ap: 1.085  d_an: 0.951
+
+Epoch 125/150  (lr=9.05e-05)
+----------------------------------------
+[Train] Loss: 18.8852  Triplet: 0.3285  ArcFace: 18.5567  d_ap: 1.178  d_an: 1.153
+[Val]   Triplet: 0.3693  d_ap: 1.098  d_an: 1.029
+
+Epoch 126/150  (lr=8.73e-05)
+----------------------------------------
+[Train] Loss: 20.7439  Triplet: 0.3209  ArcFace: 20.4230  d_ap: 1.206  d_an: 1.190
+[Val]   Triplet: 0.3785  d_ap: 1.096  d_an: 1.018
+
+Epoch 127/150  (lr=8.36e-05)
+----------------------------------------
+[Train] Loss: 19.3575  Triplet: 0.3310  ArcFace: 19.0265  d_ap: 1.171  d_an: 1.148
+[Val]   Triplet: 0.3200  d_ap: 1.081  d_an: 1.061
+
+Epoch 128/150  (lr=7.96e-05)
+----------------------------------------
+[Train] Loss: 19.6750  Triplet: 0.3258  ArcFace: 19.3491  d_ap: 1.187  d_an: 1.170
+[Val]   Triplet: 0.3153  d_ap: 1.067  d_an: 1.052
+
+Epoch 129/150  (lr=7.52e-05)
+----------------------------------------
+[Train] Loss: 17.3079  Triplet: 0.2966  ArcFace: 17.0112  d_ap: 1.125  d_an: 1.147
+[Val]   Triplet: 0.3637  d_ap: 1.192  d_an: 1.128
+
+Epoch 130/150  (lr=7.06e-05)
+----------------------------------------
+[Train] Loss: 18.8995  Triplet: 0.3337  ArcFace: 18.5658  d_ap: 1.157  d_an: 1.133
+[Val]   Triplet: 0.4832  d_ap: 1.247  d_an: 1.064
+
+Epoch 131/150  (lr=6.58e-05)
+----------------------------------------
+[Train] Loss: 18.1050  Triplet: 0.3221  ArcFace: 17.7829  d_ap: 1.173  d_an: 1.162
+[Val]   Triplet: 0.4506  d_ap: 1.167  d_an: 1.016
+
+Epoch 132/150  (lr=6.08e-05)
+----------------------------------------
+[Train] Loss: 20.1212  Triplet: 0.3551  ArcFace: 19.7660  d_ap: 1.211  d_an: 1.157
+[Val]   Triplet: 0.4791  d_ap: 1.150  d_an: 0.971
+
+Epoch 133/150  (lr=5.57e-05)
+----------------------------------------
+[Train] Loss: 20.5414  Triplet: 0.3935  ArcFace: 20.1479  d_ap: 1.239  d_an: 1.157
+[Val]   Triplet: 0.4282  d_ap: 1.163  d_an: 1.035
+
+Epoch 134/150  (lr=5.05e-05)
+----------------------------------------
+[Train] Loss: 19.1651  Triplet: 0.3571  ArcFace: 18.8079  d_ap: 1.194  d_an: 1.148
+[Val]   Triplet: 0.4488  d_ap: 1.211  d_an: 1.063
+
+Epoch 135/150  (lr=4.53e-05)
+----------------------------------------
+[Train] Loss: 20.0822  Triplet: 0.3473  ArcFace: 19.7348  d_ap: 1.223  d_an: 1.182
+[Val]   Triplet: 0.4234  d_ap: 1.180  d_an: 1.056
+
+Epoch 136/150  (lr=4.02e-05)
+----------------------------------------
+[Train] Loss: 16.6713  Triplet: 0.3093  ArcFace: 16.3620  d_ap: 1.156  d_an: 1.170
+[Val]   Triplet: 0.4656  d_ap: 1.230  d_an: 1.064
+
+Epoch 137/150  (lr=3.52e-05)
+----------------------------------------
+[Train] Loss: 17.0945  Triplet: 0.2967  ArcFace: 16.7978  d_ap: 1.185  d_an: 1.193
+[Val]   Triplet: 0.4784  d_ap: 1.225  d_an: 1.046
+
+Epoch 138/150  (lr=3.04e-05)
+----------------------------------------
+[Train] Loss: 18.1338  Triplet: 0.3226  ArcFace: 17.8112  d_ap: 1.158  d_an: 1.160
+[Val]   Triplet: 0.4254  d_ap: 1.284  d_an: 1.159
+
+Epoch 139/150  (lr=2.58e-05)
+----------------------------------------
+[Train] Loss: 19.0223  Triplet: 0.3693  ArcFace: 18.6530  d_ap: 1.230  d_an: 1.164
+[Val]   Triplet: 0.4891  d_ap: 1.239  d_an: 1.050
+
+Epoch 140/150  (lr=2.14e-05)
+----------------------------------------
+[Train] Loss: 19.0054  Triplet: 0.3340  ArcFace: 18.6714  d_ap: 1.181  d_an: 1.151
+[Val]   Triplet: 0.4849  d_ap: 1.215  d_an: 1.030
+
+Epoch 141/150  (lr=1.74e-05)
+----------------------------------------
+[Train] Loss: 17.5641  Triplet: 0.3184  ArcFace: 17.2457  d_ap: 1.179  d_an: 1.168
+[Val]   Triplet: 0.3690  d_ap: 1.201  d_an: 1.132
+
+Epoch 142/150  (lr=1.37e-05)
+----------------------------------------
+[Train] Loss: 17.4658  Triplet: 0.2941  ArcFace: 17.1717  d_ap: 1.189  d_an: 1.205
+[Val]   Triplet: 0.4559  d_ap: 1.249  d_an: 1.093
+
+Epoch 143/150  (lr=1.05e-05)
+----------------------------------------
+[Train] Loss: 19.5310  Triplet: 0.3447  ArcFace: 19.1864  d_ap: 1.194  d_an: 1.153
+[Val]   Triplet: 0.3278  d_ap: 1.164  d_an: 1.136
+
+Epoch 144/150  (lr=7.63e-06)
+----------------------------------------
+[Train] Loss: 19.1349  Triplet: 0.3609  ArcFace: 18.7741  d_ap: 1.216  d_an: 1.161
+[Val]   Triplet: 0.3559  d_ap: 1.162  d_an: 1.106
+
+Epoch 145/150  (lr=5.28e-06)
+----------------------------------------
+[Train] Loss: 17.5699  Triplet: 0.2810  ArcFace: 17.2889  d_ap: 1.156  d_an: 1.186
+[Val]   Triplet: 0.4366  d_ap: 1.213  d_an: 1.076
+
+Epoch 146/150  (lr=3.42e-06)
+----------------------------------------
+[Train] Loss: 17.9132  Triplet: 0.3131  ArcFace: 17.6001  d_ap: 1.177  d_an: 1.177
+[Val]   Triplet: 0.3502  d_ap: 1.199  d_an: 1.149
+
+Epoch 147/150  (lr=2.08e-06)
+----------------------------------------
+[Train] Loss: 18.0002  Triplet: 0.2870  ArcFace: 17.7132  d_ap: 1.156  d_an: 1.180
+[Val]   Triplet: 0.4551  d_ap: 1.278  d_an: 1.123
+
+Epoch 148/150  (lr=1.27e-06)
+----------------------------------------
+[Train] Loss: 17.1418  Triplet: 0.2814  ArcFace: 16.8604  d_ap: 1.146  d_an: 1.177
+[Val]   Triplet: 0.3810  d_ap: 1.154  d_an: 1.073
+
+Epoch 149/150  (lr=1.00e-04)
+----------------------------------------
+[Train] Loss: 16.6595  Triplet: 0.2930  ArcFace: 16.3665  d_ap: 1.162  d_an: 1.178
+[Val]   Triplet: 0.4057  d_ap: 1.262  d_an: 1.157
+
+Epoch 150/150  (lr=9.97e-05)
+----------------------------------------
+[Train] Loss: 17.9672  Triplet: 0.3082  ArcFace: 17.6590  d_ap: 1.179  d_an: 1.183
+[Val]   Triplet: 0.3229  d_ap: 1.166  d_an: 1.143
+
+Training complete!
+Best val triplet loss: 0.2481
