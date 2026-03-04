@@ -15,8 +15,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent))
 from horse_reid_triplet import HorseReIDModel, Config
 
-CKPT    = "/Users/3i-a1-2022-062/Sean/workspace/RE-ID/checkpoints/best_horse_reid.pth"
-TEST_DIR = Path("/Users/3i-a1-2022-062/Sean/workspace/RE-ID/test_img/test3")
+CKPT    = "./checkpoints/best_horse_reid.pth"
+TEST_DIR = Path("./test_imgs/test4")
 cfg     = Config()
 
 # ── Load model ────────────────────────────────────────────────
